@@ -5,15 +5,15 @@ def generate_question(operation, value, used_questions, question_limits):
     attempts = 0
     while True:
         # Generera en ny fråga
-        if operation == "multiplication":
+        if operation == "*":
             factor = random.randint(0, 12)
             question = (factor, value)
             answer = factor * value
-        elif operation == "division":
+        elif operation == "//":
             dividend = random.randint(0, 12)
             question = (dividend, value)
             answer = dividend // value
-        elif operation == "modulo":
+        elif operation == "%":
             dividend = random.randint(0, 12)
             question = (dividend, value)
             answer = dividend % value
@@ -58,10 +58,10 @@ def main():
 
     # Initial input for game settings
     num_questions = input_valid_int("Select the number of questions (12-39): ", 12, 39)
-    operation = input_valid_str("Select an operation (multiplication, division, modulo): ", 
-                                ["multiplication", "division", "modulo"])
+    operation = input_valid_str("Select an operation (*, //, %): ", 
+                                ["*", "//", "%"])
     
-    if operation == "multiplication":
+    if operation == "*":
         value = input_valid_int("Choose a multiplication table (2-12): ", 2, 12)
     else:
         value = input_valid_int("Choose a divisor (2-5): ", 2, 5)
@@ -111,8 +111,8 @@ def main():
             # If the player won, let them choose new settings
             num_questions = input_valid_int("Select the number of questions (12-39): ", 12, 39)
             operation = input_valid_str("Select an operation (multiplication, division, modulo): ", 
-                                        ["multiplication", "division", "modulo"])
-            if operation == "multiplication":
+                                        ["*", "//", "%"])
+            if operation == "*":
                 value = input_valid_int("Choose a multiplication table (2-12): ", 2, 12)
             else:
                 value = input_valid_int("Choose a divisor (2-5): ", 2, 5)

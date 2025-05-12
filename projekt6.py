@@ -13,7 +13,7 @@ def generate_question(operation, value, used_questions, max_repeats):
     question = random.choice(available_questions)
     operand = question[0]
 
-    # Uppdaterad operations-dictionary utan onödig nollkontroll
+    # Uppdaterad operations-dictionary  
     operations = {
         "*": operand * value,
         "//": operand // value,
