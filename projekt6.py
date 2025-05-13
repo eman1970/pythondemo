@@ -80,21 +80,45 @@ def main():
             print("✅ Rätt! Du överlevde denna runda.")
 
             # Dörrvalssekvens med debug-information
+            if doors == 2:
+                zombie_door = random.randint(1, doors)
+                print(f"\n🚪 [DEBUG] Zombierna gömmer sig bakom dörr {zombie_door}!")
+
+                chosen_door = validate_int(input(f"Välj dörr (1-{doors}): "), 1, doors)
+
+                if chosen_door == zombie_door:
+                    print(f"☠️ Zombierna fångade dig genom dörr {zombie_door}! Spelet är över.")
+                    break
+
+                print("🌟 Bra val! Sista frågan nu...")
+
+                # Sista matematikfrågan
+                final_question_data = generate_question(operation, value, used_questions, max_repeats)
+                if final_question_data is None:
+                    print("⚠️ Kunde inte generera sista fråga!")
+                    break
+
+                final_operand, final_correct = final_question_data
+                final_answer = validate_int(input(f"\n⚡ Sista fråga: {final_operand} {operation} {value} = ? "), 0)
+
+                if final_answer == final_correct:
+                    print("🎉 GRATTIS! Du överlevde Zombie House!")
+                    won_game = True
+                else:
+                    print("☠️ Sista frågan blev din undergång!")
+                break  # Spelet avslutas efter sista frågan.
+
             zombie_door = random.randint(1, doors)
             print(f"\n🚪 [DEBUG] Zombierna gömmer sig bakom dörr {zombie_door}!")
 
-            chosen = validate_int(input(f"Välj dörr (1-{doors}): "), 1, doors)
+            chosen_door = validate_int(input(f"Välj dörr (1-{doors}): "), 1, doors)
 
-            if chosen == zombie_door:
-                print(f"☠️ Zombierna fångade dig i dörr {zombie_door}!")
+            if chosen_door == zombie_door:
+                print(f"☠️ Zombierna fångade dig genom dörr {zombie_door}! Spelet är över.")
                 break
 
             doors -= 1
             print(f"Du har {doors} dörrar kvar att välja mellan.")
-
-            if doors == 1:
-                print("🎉 Grattis! Du har klarat alla frågor och överlevt Zombie House!")
-                won_game = True
 
         play_again = validate_str(input("\nSpela igen? (ja/nej): "), ["ja", "nej"])
 
@@ -106,7 +130,10 @@ def main():
             print("Startar om spelet med **nya inställningar**...")
             num_questions = validate_int(input("Antal frågor (12-39): "), 12, 39)
             operation = validate_str(input("Räknesätt (*, //, %): "), ["*", "//", "%"])
-            value = validate_int(input("Multiplikationstabell (2-12) eller divisor (2-5): "), 2, 12 if operation == "*" else 2, 5)
+            if operation == "*":
+                value = validate_int(input("Multiplikationstabell (2-12): "), 2, 12)
+            else:
+                value = validate_int(input("Divisor (2-5): "), 2, 5)
         else:
             print("Startar om spelet med **samma inställningar**...")
 
