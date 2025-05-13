@@ -1,121 +1,123 @@
 import random
 
-def generate_question(operation, value, used_questions, question_limits):
-    """Generates a unique mathematical question based on the selected operation."""
+def generate_question(operation, value, used_questions):
+    """Genererar en unik matematisk fråga baserat på vald operation."""
     attempts = 0
+    possible_questions = [(operand, value) for operand in range(0, 13)]
+    
+    # Bestäm max upprepningar baserat på antal frågor
+    max_repeats = (
+        0 if len(used_questions) <= 13 else  # Ingen upprepning vid ≤13 frågor
+        2 if len(used_questions) <= 26 else  # Max 2 upprepningar vid ≤26 frågor
+        3  # Max 3 upprepningar vid >26 frågor
+    )
+
     while True:
-        # Generera en ny fråga
-        if operation == "*":
-            factor = random.randint(0, 12)
-            question = (factor, value)
-            answer = factor * value
-        elif operation == "//":
-            dividend = random.randint(0, 12)
-            question = (dividend, value)
-            answer = dividend // value
-        elif operation == "%":
-            dividend = random.randint(0, 12)
-            question = (dividend, value)
-            answer = dividend % value
-        else:
-            raise ValueError("Invalid operation!")
+        available_questions = [q for q in possible_questions if used_questions.get(q, 0) < max_repeats]
 
-        max_occurrences = question_limits[0] if len(used_questions) < 14 else \
-                          question_limits[1] if len(used_questions) < 27 else \
-                          question_limits[2]
+        if not available_questions:
+            print("[DEBUG] Inga fler unika frågor tillgängliga. Återanvänder en av de tidigare.")
+            return random.choice(list(used_questions.keys()))[0], used_questions[random.choice(list(used_questions.keys()))]
 
-        if used_questions.get(question, 0) < max_occurrences:
-            used_questions[question] = used_questions.get(question, 0) + 1
-            return question[0], answer
+        question = random.choice(available_questions)
+        operand = question[0]
 
-        attempts += 1
-        if attempts > 100:
-            raise ValueError("Failed to generate a unique question.")
+        operations = {
+            "*": operand * value,
+            "//": operand // value,
+            "%": operand % value
+        }
+
+        answer = operations.get(operation)
+
+        used_questions[question] = used_questions.get(question, 0) + 1
+        return operand, answer
 
 def input_valid_int(prompt_text, min_value, max_value=None):
-    """Validates integer input and ensures it is within the allowed range."""
+    """Validerar heltalsinmatning och säkerställer att den är inom giltigt intervall."""
     while True:
         try:
             user_answer = int(input(prompt_text).strip())
             if max_value is None or min_value <= user_answer <= max_value:
                 return user_answer
-            print(f"Invalid number! Enter an integer between {min_value} and {max_value}.")
+            print(f"Ogiltigt nummer! Ange ett tal mellan {min_value} och {max_value}.")
         except ValueError:
-            print("Invalid input! Enter a valid integer.")
+            print("Ogiltig inmatning! Ange ett giltigt heltal.")
 
 def input_valid_str(prompt_text, valid_answers):
-    """Validates string input and ensures the user selects a valid option."""
+    """Validerar stränginmatning och säkerställer att användaren väljer ett giltigt alternativ."""
     while True:
         user_answer = input(prompt_text).strip().lower()
         if user_answer in valid_answers:
             return user_answer
-        print(f"Invalid choice! Enter one of the following: {', '.join(valid_answers)}.")
+        print(f"Ogiltigt val! Ange något av följande: {', '.join(valid_answers)}.")
 
 def main():
-    """Main function that handles the entire game."""
-    print("Welcome to Zombie House! 🧟‍♂️")
-    print("You must answer math questions correctly and avoid zombie doors to escape.")
+    """Huvudfunktionen som styr hela spelet."""
+    print("Välkommen till Zombie House! 🧟‍♂️")
+    print("Du måste svara rätt på mattefrågor och undvika zombiedörrar för att fly.")
 
-    # Initial input for game settings
-    num_questions = input_valid_int("Select the number of questions (12-39): ", 12, 39)
-    operation = input_valid_str("Select an operation (*, //, %): ", 
-                                ["*", "//", "%"])
+    num_questions = input_valid_int("Välj antal frågor (12-39): ", 12, 39)
+    operation = input_valid_str("Välj en operation (*, //, %): ", ["*", "//", "%"])
     
     if operation == "*":
-        value = input_valid_int("Choose a multiplication table (2-12): ", 2, 12)
+        value = input_valid_int("Välj multiplikationstabell (2-12): ", 2, 12)
     else:
-        value = input_valid_int("Choose a divisor (2-5): ", 2, 5)
+        value = input_valid_int("Välj en divisor (2-5): ", 2, 5)
 
     while True:
         used_questions = {}
-        question_limits = (1, 2, 3)
         doors = num_questions
         won_game = False
 
         for question_num in range(1, num_questions + 1):
-            factor_or_dividend, correct_answer = generate_question(operation, value, used_questions, question_limits)
-            print(f"\nQuestion {question_num}: What is {factor_or_dividend} {operation} {value}?")
-            
-            user_answer = input_valid_int("Your answer: ", 0)
-
-            if user_answer != correct_answer:
-                print("Wrong answer! The zombies got you! Game over! 😱")
+            try:
+                factor_or_dividend, correct_answer = generate_question(operation, value, used_questions)
+            except ValueError as e:
+                print(f"⚠️ Spelet kunde inte generera fler unika frågor: {e}")
                 break
 
-            print(f"Correct answer! You have completed {question_num} of {num_questions} questions.")
+            print(f"\nFråga {question_num}: Vad blir {factor_or_dividend} {operation} {value}?")
+            
+            user_answer = input_valid_int("Ditt svar: ", 0)
+
+            if user_answer != correct_answer:
+                print("Fel svar! Zombierna fångade dig! Spelet är över! 😱")
+                break
+
+            print(f"Korrekt! Du har klarat {question_num} av {num_questions} frågor.")
 
             if doors > 1:
-                print(f"Choose a door between 1 and {doors}. The zombies are hiding behind one of them!")
                 zombie_door = random.randint(1, doors)
-                print(f"DEBUG: The zombies are hiding behind door {zombie_door}")
+                
+                # 🛠 Debugg-kod: Visa vilken dörr zombierna gömmer sig bakom innan valet
+                print(f"\n🚪 [DEBUG] Zombierna gömmer sig bakom dörr {zombie_door}!")
 
-                chosen_door = input_valid_int(f"Which door do you choose (1-{doors})? ", 1, doors)
+                chosen_door = input_valid_int(f"Vilken dörr väljer du (1-{doors})? ", 1, doors)
 
                 if chosen_door == zombie_door:
-                    print(f"Oh no! The zombies got you! They were hiding behind door {zombie_door}. Game over! 😱")
+                    print(f"☠️ Ajdå! Zombierna fångade dig genom dörr {zombie_door}! Spelet är över.")
                     break
 
                 doors -= 1
             else:
-                print("Congratulations! You completed all questions and survived Zombie House! 🎉")
+                print("🎉 Grattis! Du har klarat alla frågor och överlevt Zombie House!")
                 won_game = True
                 break
 
-        play_again = input_valid_str("Do you want to play again? (yes/no): ", ["yes", "no"])
+        play_again = input_valid_str("Vill du spela igen? (ja/nej): ", ["ja", "nej"])
         
-        if play_again != "yes":
-            print("Thanks for playing Zombie House! Goodbye!")
+        if play_again != "ja":
+            print("👋 Tack för att du spelade Zombie House! Hejdå!")
             break
 
         if won_game:
-            # If the player won, let them choose new settings
-            num_questions = input_valid_int("Select the number of questions (12-39): ", 12, 39)
-            operation = input_valid_str("Select an operation (multiplication, division, modulo): ", 
-                                        ["*", "//", "%"])
+            num_questions = input_valid_int("Välj antal frågor (12-39): ", 12, 39)
+            operation = input_valid_str("Välj en operation (*, //, %): ", ["*", "//", "%"])
             if operation == "*":
-                value = input_valid_int("Choose a multiplication table (2-12): ", 2, 12)
+                value = input_valid_int("Välj multiplikationstabell (2-12): ", 2, 12)
             else:
-                value = input_valid_int("Choose a divisor (2-5): ", 2, 5)
+                value = input_valid_int("Välj en divisor (2-5): ", 2, 5)
 
 if __name__ == "__main__":
     main()
