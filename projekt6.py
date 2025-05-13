@@ -8,7 +8,7 @@ def generate_question(operation, value, used_questions, max_repeats):
     available_questions = [q for q in possible_questions if used_questions.get(q, 0) <= max_repeats]
 
     if not available_questions:
-        return None  # Inga fler unika frågor kvar att generera
+        return None  
 
     question = random.choice(available_questions)
     operand = question[0]
@@ -76,16 +76,21 @@ def main():
             print("✅ Rätt! Du överlevde denna runda.")
 
             # Dörrvalssekvens med debug-information
-            if doors == 2:
-                zombie_door = random.randint(1, doors)
-                print(f"\n🚪 [DEBUG] Zombierna gömmer sig bakom dörr {zombie_door}!")
+            zombie_door = random.randint(1, doors)
+            print(f"\n🚪 [DEBUG] Zombierna gömmer sig bakom dörr {zombie_door}!")
 
-                chosen_door = input_valid_int(f"Välj dörr (1-{doors}): ", 1, doors)
+            chosen_door = input_valid_int(f"Välj dörr (1-{doors}): ", 1, doors)
 
-                if chosen_door == zombie_door:
-                    print(f"☠️ Zombierna fångade dig genom dörr {zombie_door}! Spelet är över.")
-                    break
+            if chosen_door == zombie_door:
+                print(f"☠️ Zombierna fångade dig genom dörr {zombie_door}! Spelet är över.")
+                break
+            else:
+                print(f"✅ Du valde dörr {chosen_door}, och zombierna var bakom dörr {zombie_door}!")
 
+            doors -= 1
+            print(f"Du har {doors} dörrar kvar att välja mellan.")
+
+            if doors == 1:
                 print("🌟 Bra val! Sista frågan nu...")
 
                 final_question_data = generate_question(operation, value, used_questions, max_repeats)
@@ -102,18 +107,6 @@ def main():
                 else:
                     print("☠️ Sista frågan blev din undergång!")
                 break  
-
-            zombie_door = random.randint(1, doors)
-            print(f"\n🚪 [DEBUG] Zombierna gömmer sig bakom dörr {zombie_door}!")
-
-            chosen_door = input_valid_int(f"Välj dörr (1-{doors}): ", 1, doors)
-
-            if chosen_door == zombie_door:
-                print(f"☠️ Zombierna fångade dig genom dörr {zombie_door}! Spelet är över.")
-                break
-
-            doors -= 1
-            print(f"Du har {doors} dörrar kvar att välja mellan.")
 
         play_again = input_valid_str("\nSpela igen? (ja/nej): ", ["ja", "nej"])
 
