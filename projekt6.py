@@ -43,6 +43,7 @@ def validate_str(user_input, valid_answers):
     return user_answer if user_answer in valid_answers else None
 
 def main():
+    """Huvudfunktionen som styr spelet."""
     print("Välkommen till Zombie House! 🧟‍♂️")
     print("Svara rätt på mattefrågor och undvik zombiedörrar för att fly.")
 
@@ -79,7 +80,7 @@ def main():
 
             print("✅ Rätt! Du överlevde denna runda.")
 
-            # Dörrvalssekvens med debug-information
+            # 🚪 Sista dörrvalet sker när det bara är två dörrar kvar
             if doors == 2:
                 zombie_door = random.randint(1, doors)
                 print(f"\n🚪 [DEBUG] Zombierna gömmer sig bakom dörr {zombie_door}!")
