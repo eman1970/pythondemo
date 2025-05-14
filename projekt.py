@@ -1,5 +1,7 @@
-import random, math 
+import random
+import math
 
+# ----- KONSTANTER -----
 MIN_TABLE = 2
 MAX_TABLE = 12
 TOTAL_QUESTIONS = 12
@@ -46,16 +48,7 @@ def setup_zombie_door(doors):
     return random.randint(1, doors)
 
 def input_valid_int(question, prompt_text, min_value, max_value):
-    """Tar emot och validerar en heltalsinmatning från användaren.
-
-    Args:
-        prompt_text (str): Texten som visas för användaren vid inmatning.
-        min_value (int): Det lägsta giltiga värdet.
-        max_value (int, optional): Det högsta giltiga värdet. Standard är None.
-
-    Returns:
-        int | None: Returnerar det giltiga heltalet, eller None vid felaktig inmatning.
-    """ 
+    """Hanterar och validerar heltalsinput från användaren."""
     while True:  # Loopa tills korrekt värde skrivs in
         user_input = input(question)
         if user_input.isdigit():
@@ -65,15 +58,7 @@ def input_valid_int(question, prompt_text, min_value, max_value):
         print(prompt_text)
         
 def input_valid_str(question, prompt_text, valid_answers):
-    """Tar emot och validerar en stränginmatning från användaren.
-
-    Args:
-        prompt_text (str): Texten som visas för användaren vid inmatning.
-        valid_answers (list): En lista med giltiga svarsalternativ.
-
-    Returns:
-        str | None: Returnerar en giltig sträng, eller None om inmatningen är ogiltig.
-    """
+    """Hanterar och validerar stränginput från användaren."""
     while True:
         user_input = input(question).strip().lower()
         if user_input in valid_answers:
@@ -81,15 +66,7 @@ def input_valid_str(question, prompt_text, valid_answers):
         print(prompt_text)
 
 def main():
-    """Huvudfunktionen som hanterar spelet Zombiehuset.
-
-    - Spelaren väljer en multiplikationstabell och svarar på 12 frågor.
-    - Efter varje korrekt svar måste spelaren välja en dörr för att undvika zombies.
-    - Spelet fortsätter tills spelaren svarar fel eller väljer en dörr där zombies gömmer sig.
-    - Om alla 12 frågor besvaras korrekt överlever spelaren.
-
-    Funktionen hanterar även användarinmatning och ser till att den är giltig.
-    """  
+    """Huvudfunktion för Zombiehuset-spelet."""
     print("Välkommen till Zombiehuset! 🧟‍♂️")
     print("Du måste svara rätt på matematiska frågor och undvika zombiedörrar för att fly.")
 
