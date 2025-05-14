@@ -58,7 +58,7 @@ def input_valid_int(question, prompt_text, min_value, max_value):
                 return user_int  # Korrekt tal, returnera värdet
         print(prompt_text)
         
-def input_valid_str(prompt_text, valid_answers):
+def input_valid_str(question, prompt_text, valid_answers):
     """Tar emot och validerar en stränginmatning från användaren.
 
     Args:
@@ -68,8 +68,11 @@ def input_valid_str(prompt_text, valid_answers):
     Returns:
         str | None: Returnerar en giltig sträng, eller None om inmatningen är ogiltig.
     """
-    user_answer = input(prompt_text).strip().lower()
-    return user_answer if user_answer in valid_answers else None
+    while True:
+        user_input = input(question).strip().lower()
+        if user_input in valid_answers:
+            return user_input
+        print(prompt_text)
 
 def main():
     """Huvudfunktionen som hanterar spelet Zombiehuset.
@@ -80,26 +83,27 @@ def main():
     - Om alla 12 frågor besvaras korrekt överlever spelaren.
 
     Funktionen hanterar även användarinmatning och ser till att den är giltig.
-    """
+    """  
     print("Välkommen till Zombiehuset! 🧟‍♂️")
     print("Du måste svara rätt på matematiska frågor och undvika zombiedörrar för att fly.")
 
-    while True:
-        # Väljer multiplikationstabell, ser till att inmatningen är giltig
+    while True:  # Huvudloop för spelomgångar
+        # Spelinitiering
         table = None
         while table is None:
-            table = input_valid_int("Välj en multiplikationstabell (2-12): ", "Felaktig inmatning! Ange ett giltigt heltal.", 2, 12)   
+            table = input_valid_int("Välj en multiplikationstabell (2-12): ", 
+                                  "Felaktig inmatning! Ange ett giltigt heltal.", 2, 12)
         used_questions = set()
-        doors = 12  # Totalt antal dörrar i spelet
+        doors = 12
 
+        # Spelloop för frågor
         for question_num in range(1, 13):
             factor, correct_answer = generate_question(table, used_questions)
             print(f"\nFråga {question_num}: Vad är {factor} * {table}?")
 
-            # Kontroll av giltig inmatning för spelarens svar
             user_answer = None
             while user_answer is None:
-                user_answer = input_valid_int("Ditt svar: ", "Felaktig inmatning! Ange ett giltigt heltal.", 0, math.inf)              
+                user_answer = input_valid_int("Ditt svar: ", "Felaktig inmatning! Ange ett giltigt heltal.", 0, math.inf)
 
             if user_answer != correct_answer:
                 print("Fel svar! Zombiesarna tog dig! Game over! 😱")
@@ -111,33 +115,30 @@ def main():
                 zombie_door = setup_zombie_door(doors)
                 print(f"[DEBUG] Zombiesarna gömmer sig bakom dörr {zombie_door}.")
 
-                # Kontroll av giltig dörrval
                 chosen_door = None
                 while chosen_door is None:
-                    chosen_door = input_valid_int(f"Välj en dörr mellan 1 och {doors}: ", f"Felaktigt val! Ange ett heltal mellan {1} och {doors}.", 1, doors)
+                    chosen_door = input_valid_int(f"Välj en dörr mellan 1 och {doors}: ",
+                                                f"Felaktigt val! Ange ett heltal mellan 1 och {doors}.", 1, doors)
 
-                # Meddelar spelaren om zombiesarnas position innan spelet fortsätter
                 if not choose_door(zombie_door, chosen_door):
                     print(f"Oh nej! Zombiesarna tog dig! De gömde sig bakom dörr {zombie_door}. Game over! 😱")
-                    break  
+                    break
                 else:
                     print(f"Puh! Du valde rätt dörr. Zombiesarna gömde sig bakom dörr {zombie_door}. Du klarade denna runda! 🎉")
-
-                doors -= 1  # Minska antal dörrar efter varje runda
+                    doors -= 1
             else:
                 print("Grattis! Du har klarat alla frågor och överlevt Zombiehuset! 🎉")
 
-        # Frågar spelaren om de vill spela igen och säkerställer giltig inmatning
-        play_again = None
-        while play_again is None:
-            play_again = input_valid_str("Vill du spela igen? (ja/nej): ", ["ja", "nej"])
-            if play_again is None:
-                print("Felaktigt val! Ange 'ja' eller 'nej'.")
-
+        # Hantera "spela igen" utan nested loop
+        play_again = input_valid_str("Vill du spela igen? (ja/nej): ",
+                                   "Felaktigt val! Ange 'ja' eller 'nej'.", ["ja", "nej"])
         if play_again != "ja":
             print("Tack för att du spelade Zombiehuset! Hejdå!")
             break
-
+    
 if __name__ == "__main__":
     main()
+               
+        
+    
 
