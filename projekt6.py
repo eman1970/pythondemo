@@ -42,19 +42,8 @@ def validate_str(prompt_text, valid_answers):
         print(f"Fel! Ange något av: {', '.join(valid_answers)}")
 
 def handle_door_selection(doors):
-    """Hanterar dörrval och returnerar vald dörr och zombie-dörr"""
-    zombie_door = random.randint(1, doors)
-    
-    # Show zombie door before selection in debug mode
-    if DEBUG:
-        print(f"\n[DEBUG] Zombies are behind door: {zombie_door}")
-    
-    chosen_door = validate_int(f"Välj dörr (1-{doors}): ", 1, doors)
-    
-    # Always show zombie door after selection
-    print(f"\nYou chose door {chosen_door}, zombies were behind door {zombie_door}")
-    
-    return chosen_door, zombie_door
+    """Hanterar dörrval och returnerar vald dörr"""
+    return validate_int(f"Välj dörr (1-{doors}): ", 1, doors)
 
 def main():
     """Huvudfunktion med centraliserade utskrifter"""
@@ -94,8 +83,17 @@ def main():
 
             # Dörrdel med centraliserade utskrifter
             if doors > 1:
-                chosen_door, zombie_door = handle_door_selection(doors)
-
+                zombie_door = random.randint(1, doors)
+                
+                # Debug-utskrift 
+                if DEBUG:
+                    print(f"\n[DEBUG] Zombies are behind door: {zombie_door}")
+                
+                chosen_door = handle_door_selection(doors)
+                
+                # Alltid visa zombiedörr efter val
+                print(f"\nYou chose door {chosen_door}, zombies were behind door {zombie_door}")
+                
                 if chosen_door == zombie_door:
                     print("Zombierna fångade dig! Spelet är över.")
                     break
