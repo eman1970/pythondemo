@@ -1,5 +1,11 @@
 import random, math 
 
+MIN_TABLE = 2
+MAX_TABLE = 12
+TOTAL_QUESTIONS = 12
+INITIAL_DOORS = 12
+DEBUG = True
+
 def generate_question(table, used_questions):
     """Genererar en unik multiplikationsfråga baserad på den valda tabellen.
 
@@ -11,7 +17,7 @@ def generate_question(table, used_questions):
         tuple: En faktor och det korrekta svaret för frågan.
     """
     while True:
-        factor = random.randint(0, 12)
+        factor = random.randint(0, MAX_TABLE)
         if factor not in used_questions:
             used_questions.add(factor)
             return factor, factor * table
@@ -91,13 +97,13 @@ def main():
         # Spelinitiering
         table = None
         while table is None:
-            table = input_valid_int("Välj en multiplikationstabell (2-12): ", 
-                                  "Felaktig inmatning! Ange ett giltigt heltal.", 2, 12)
+            table = input_valid_int(f"Välj en multiplikationstabell ({MIN_TABLE}-{MAX_TABLE}): ", 
+                                  "Felaktig inmatning! Ange ett giltigt heltal.", MIN_TABLE, MAX_TABLE)
         used_questions = set()
-        doors = 12
+        doors = INITIAL_DOORS
 
         # Spelloop för frågor
-        for question_num in range(1, 13):
+        for question_num in range(1, TOTAL_QUESTIONS + 1):
             factor, correct_answer = generate_question(table, used_questions)
             print(f"\nFråga {question_num}: Vad är {factor} * {table}?")
 
@@ -109,11 +115,14 @@ def main():
                 print("Fel svar! Zombiesarna tog dig! Game over! 😱")
                 break
 
-            print(f"Rätt svar! Du har klarat {question_num} av 12 frågor.")
+            print(f"Rätt svar! Du har klarat {question_num} av {TOTAL_QUESTIONS} frågor.")
 
-            if question_num < 12:
+            if question_num < TOTAL_QUESTIONS:
                 zombie_door = setup_zombie_door(doors)
-                print(f"[DEBUG] Zombiesarna gömmer sig bakom dörr {zombie_door}.")
+                
+                if DEBUG:  # <-- Debug-meddelande som bara visas när DEBUG är True
+                    print(f"[DEBUG] Zombiesarna gömmer sig bakom dörr {zombie_door}.")
+
 
                 chosen_door = None
                 while chosen_door is None:
