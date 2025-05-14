@@ -65,7 +65,7 @@ def main():
     num_questions = validate_int("Antal frågor (12-39): ", 12, 39)
     operation = validate_str("Räknesätt (*, //, %): ", ["*", "//", "%"])
     value = validate_int(
-        "Multiplikationstabell (2-12): " if operation == "*" else "Divisor (2-5): ",
+        f"Multiplikationstabell (2-12): " if operation == "*" else "Divisor (2-5): ",
         2, 12 if operation == "*" else 5
     )
 
