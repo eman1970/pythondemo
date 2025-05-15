@@ -22,21 +22,21 @@ def generate_question(operation, value, used_questions, max_repeats):
     used_questions[question] = used_questions.get(question, 0) + 1
     return operand, answer
 
-def validate_int(prompt_text, min_value, max_value=None):
+def validate_int(error_msg, min_value, max_value=None):
     """Validerar heltalsinput"""
     while True:
         try:
-            user_input = int(input(prompt_text))
+            user_input = int(input(error_msg))
             if max_value is None or min_value <= user_input <= max_value:
                 return user_input
             print(f"Fel! Ange ett tal mellan {min_value} och {max_value}.")
         except ValueError:
             print("Ogiltig inmatning! Ange ett heltal.")
 
-def validate_str(prompt_text, valid_answers):
+def validate_str(error_msg, valid_answers):
     """Validerar stränginput mot giltiga alternativ"""
     while True:
-        user_input = input(prompt_text).strip().lower()
+        user_input = input(error_msg).strip().lower()
         if user_input in valid_answers:
             return user_input
         print(f"Fel! Ange något av: {', '.join(valid_answers)}")
