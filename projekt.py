@@ -67,7 +67,7 @@ def input_valid_str(question, error_msg, valid_answers):
 
 def main():
     """Huvudfunktion för Zombiehuset-spelet."""
-    print("Välkommen till Zombiehuset! 🧟‍♂️")
+    print("Välkommen till Zombiehuset! \U0001F9DF\u200D\u2642\uFE0F")
     print("Du måste svara rätt på matematiska frågor och undvika zombiedörrar för att fly.")
 
     while True:  # Huvudloop för spelomgångar
@@ -89,7 +89,7 @@ def main():
                 user_answer = input_valid_int("Ditt svar: ", "Felaktig inmatning! Ange ett giltigt heltal.", 0, math.inf)
 
             if user_answer != correct_answer:
-                print("Fel svar! Zombiesarna tog dig! Game over! 😱")
+                print("Fel svar! Zombiesarna tog dig! Game over! \U0001F6315")
                 break
 
             print(f"Rätt svar! Du har klarat {question_num} av {TOTAL_QUESTIONS} frågor.")
@@ -107,13 +107,13 @@ def main():
                                                 f"Felaktigt val! Ange ett heltal mellan 1 och {doors}.", 1, doors)
 
                 if not choose_door(zombie_door, chosen_door):
-                    print(f"Oh nej! Zombiesarna tog dig! De gömde sig bakom dörr {zombie_door}. Game over! 😱")
+                    print(f"Oh nej! Zombiesarna tog dig! De gömde sig bakom dörr {zombie_door}. Game over! \U0001F631")
                     break
                 else:
                     print(f"Puh! Du valde rätt dörr. Zombiesarna gömde sig bakom dörr {zombie_door}. Du klarade denna runda! 🎉")
                     doors -= 1
             else:
-                print("Grattis! Du har klarat alla frågor och överlevt Zombiehuset! 🎉")
+                print("Grattis! Du har klarat alla frågor och överlevt Zombiehuset! \U0001F389")
 
         # Hantera "spela igen" utan nested loop
         play_again = input_valid_str("Vill du spela igen? (ja/nej): ",
