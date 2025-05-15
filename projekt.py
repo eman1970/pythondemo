@@ -47,7 +47,7 @@ def setup_zombie_door(doors):
     """
     return random.randint(1, doors)
 
-def input_valid_int(question, prompt_text, min_value, max_value):
+def input_valid_int(question, error_msg, min_value, max_value):
     """Hanterar och validerar heltalsinput från användaren."""
     while True:  # Loopa tills korrekt värde skrivs in
         user_input = input(question)
@@ -55,15 +55,15 @@ def input_valid_int(question, prompt_text, min_value, max_value):
             user_int = int(user_input)
             if user_int >= min_value and (max_value is None or user_int <= max_value):
                 return user_int  # Korrekt tal, returnera värdet
-        print(prompt_text)
+        print(error_msg)
         
-def input_valid_str(question, prompt_text, valid_answers):
+def input_valid_str(question, error_msg, valid_answers):
     """Hanterar och validerar stränginput från användaren."""
     while True:
         user_input = input(question).strip().lower()
         if user_input in valid_answers:
             return user_input
-        print(prompt_text)
+        print(error_msg)
 
 def main():
     """Huvudfunktion för Zombiehuset-spelet."""

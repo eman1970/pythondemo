@@ -1,6 +1,6 @@
 import random
 
-# Globala konstanter
+# Global konstant
 DEBUG = True  # Set to False to disable debug mode
 
 def generate_question(operation, value, used_questions, max_repeats):
