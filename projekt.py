@@ -89,7 +89,7 @@ def main():
                 user_answer = input_valid_int("Ditt svar: ", "Felaktig inmatning! Ange ett giltigt heltal.", 0, math.inf)
 
             if user_answer != correct_answer:
-                print("Fel svar! Zombiesarna tog dig! Game over! \U0001F6315")
+                print("Fel svar! Zombiesarna tog dig! Game over! \U0001F631")
                 break
 
             print(f"Rätt svar! Du har klarat {question_num} av {TOTAL_QUESTIONS} frågor.")
