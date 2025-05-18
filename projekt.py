@@ -6,7 +6,7 @@ MIN_TABLE = 2
 MAX_TABLE = 12
 TOTAL_QUESTIONS = 12
 INITIAL_DOORS = 12
-DEBUG = True
+DEBUG = False
 
 def generate_question(table, used_questions):
     """Genererar en unik multiplikationsfråga baserad på den valda tabellen.
