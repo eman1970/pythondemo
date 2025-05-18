@@ -59,10 +59,10 @@ def input_valid_int(question, error_msg, min_value, max_value):
         
 def input_valid_str(question, error_msg, valid_answers):
     """Hanterar och validerar stränginput från användaren."""
-    while True:
+    while True: # Loopa tills korrekt värde skrivs in
         user_input = input(question).strip().lower()
         if user_input in valid_answers:
-            return user_input
+            return user_input # Korrekt sträng, returnera värdet
         print(error_msg)
 
 def main():
@@ -110,7 +110,7 @@ def main():
                     print(f"Oh nej! Zombiesarna tog dig! De gömde sig bakom dörr {zombie_door}. Game over! \U0001F631")
                     break
                 else:
-                    print(f"Puh! Du valde rätt dörr. Zombiesarna gömde sig bakom dörr {zombie_door}. Du klarade denna runda! 🎉")
+                    print(f"Puh! Du valde rätt dörr. Zombiesarna gömde sig bakom dörr {zombie_door}. Du klarade denna runda! \U0001F389")
                     doors -= 1
             else:
                 print("Grattis! Du har klarat alla frågor och överlevt Zombiehuset! \U0001F389")
